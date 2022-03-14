@@ -10,7 +10,8 @@ on:
 env:
   PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
   GCP_WIF_ID: ${{ secrets.GCP_WIF_ID }}
-  IMAGE: asia-northeast1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/simple-whale-demo/simple-whale-demo:${{ github.sha }}
+    #IMAGE: asia-northeast1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/simple-whale-demo/simple-whale-demo:${{ github.sha }}
+  IMAGE: asia-northeast1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/simple-whale-demo/simple-whale-demo:latest
 
 jobs:
   build:
