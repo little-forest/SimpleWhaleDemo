@@ -54,6 +54,9 @@ jobs:
       - name: build
         run: docker build . -t ${{ env.IMAGE }}
 
+      - name: push
+        run: docker push ${{ env.IMAGE }}
+
           #- name: Describe my-service-account
           #  run: gcloud iam service-accounts describe 'github-action@radiant-micron-341302.iam.gserviceaccount.com'
           #
