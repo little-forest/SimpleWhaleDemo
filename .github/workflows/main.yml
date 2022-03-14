@@ -10,7 +10,8 @@ on:
 env:
   PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
   GCP_WIF_ID: ${{ secrets.GCP_WIF_ID }}
-    #IMAGE: asia-northeast1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/simple-whale-demo/simple-whale-demo:${{ github.sha }}
+  GCP_WI_POOL_NAME: my-pool
+  GCP_WI_PROVIDER_NAME: my-provider
   IMAGE: asia-northeast1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/simple-whale-demo/simple-whale-demo:latest
 
 jobs:
@@ -42,7 +43,7 @@ jobs:
       - id: auth
         uses: google-github-actions/auth@v0
         with:
-          workload_identity_provider: projects/${{ env.GCP_WIF_ID }}/locations/global/workloadIdentityPools/my-pool/providers/my-provider
+          workload_identity_provider: projects/${{ env.GCP_WIF_ID }}/locations/global/workloadIdentityPools/${{ env.GCP_WI_POOL_NAME }}/providers/${{ env.GCP_WI_PROVIDER_NAME }}
           service_account: github-action@${{ env.PROJECT_ID }}.iam.gserviceaccount.com
           project_id: ${{ env.PROJECT_ID }}
 
@@ -55,22 +56,7 @@ jobs:
       - name: Authorize Docker for Artifact Registry
         run: gcloud auth configure-docker asia-northeast1-docker.pkg.dev
 
-          #- name: build
-          #  run: docker build . -t ${{ env.IMAGE }}
-
-          #- name: push
-          #  run: docker push ${{ env.IMAGE }}
-
-          #- name: Describe my-service-account
-          #  run: gcloud iam service-accounts describe 'github-action@radiant-micron-341302.iam.gserviceaccount.com'
-          #
-      #- 
-      #  uses: docker/login-action@v1 
-      #  with:
-      #    username: ${{ secrets.DOCKER_USERNAME }}
-      #    password: ${{ secrets.DOCKER_PASSWORD }}
-      -
-        name: Build and push
+      - name: Build and push
         id: docker_build
         uses: docker/build-push-action@v2
         with:
@@ -82,6 +68,4 @@ jobs:
           tags: ${{ env.IMAGE }}
           cache-from: type=local,src=/tmp/.buildx-cache
           cache-to: type=local,dest=/tmp/.buildx-cache
-            # -
-      #   name: Image digest
-      #   run: echo ${{ steps.docker_build.outputs.digest }}
+
